@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Like;
-use Faker\Provider\Image;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
-
 use Illuminate\Support\Facades\Input;
 use Laravel\Passport\Client;
 use Validator;
@@ -154,9 +152,13 @@ class UsersController extends Controller
      */
     public function uploadPhoto(Request $request)
     {
-        $this->validate($request, [
+        $v = validator($request, [
             'profile_image' => 'required|mimes:jpeg,png |max:4096',
         ]);
+
+        if ($v->fails()) {
+            return response()->json($v->errors()->all(), 400);
+        }
 
         if ($user = Auth::guard('api')->user()) {
 
@@ -167,6 +169,12 @@ class UsersController extends Controller
 
             $user->profile_image = $filename;
             $user->save();
+
+            $json = [
+                'success' => true,
+                'message' => 'You are logged out.',
+            ];
+            return response()->json($json, 200);
         } else {
             return response()->json(['error' => 'Unauthorised'], 401);
         }
@@ -204,9 +212,7 @@ class UsersController extends Controller
     public function getCurrentUserInfo()
     {
         if ($user = Auth::guard('api')->user()) {
-
             $json = $user;
-
             return response()->json($json, 200);
         } else {
             return response()->json(['error' => 'Unauthorised'], 401);
