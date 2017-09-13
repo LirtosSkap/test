@@ -14,8 +14,3 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::get('users','Api\UsersController@index');
-Route::get('test','Api\UsersController@getSpecificUserInfo');
-
-

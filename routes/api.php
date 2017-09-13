@@ -13,8 +13,46 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('register','Api\UsersController@create');
-Route::post('login','Api\UsersController@login');
-Route::post('logout','Api\UsersController@logout');
-Route::get('users','Api\UsersController@index');
+Route::group([
+    'as' => 'user::',
+    'namespace' => '\Api'
+    ], function () {
 
+    Route::post('register', [
+        'as' => 'register',
+        'uses' => 'UsersController@create'
+    ]);
+    Route::post('login', [
+        'as' => 'login',
+        'uses' => 'UsersController@login'
+    ]);
+    Route::post('logout', [
+        'as' => 'logout',
+        'uses' => 'UsersController@logout'
+    ]);
+    Route::post('update', [
+        'as' => 'update',
+        'uses' => 'UsersController@update'
+    ]);
+    Route::post('photo', [
+        'as' => 'updatePhoto',
+        'uses' => 'UsersController@uploadPhoto'
+    ]);
+    Route::post('like', [
+        'as' => 'like',
+        'uses' => 'UsersController@like'
+    ]);
+
+    Route::get('users', [
+        'as' => 'getAll',
+        'uses' => 'UsersController@index'
+    ]);
+    Route::get('user', [
+        'as' => 'getCurrent',
+        'uses' => 'UsersController@getCurrentUserInfo'
+    ]);
+    Route::post('userByID', [
+        'as' => 'getByID',
+        'uses' => 'UsersController@getSpecificUserInfo'
+    ]);
+});

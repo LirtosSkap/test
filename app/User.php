@@ -42,6 +42,11 @@ class User extends Authenticatable
     }
 
 
+    /**
+     * Relations with Like
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
     public function likes()
     {
         return $this->morphMany('App\Like', 'likable');
